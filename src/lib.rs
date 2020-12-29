@@ -104,22 +104,38 @@ impl TelloDrone {
         self.get_response()
     }
 
-    fn get_response(&self){
+    pub fn get_response(&self) -> String {
+
+        let mut resp = String::new();
 
         let mut buf = [0; 10];
         match self.command_socket.recv(&mut buf) {
-            Ok(received) => println!("received {} bytes {:?}", received, str::from_utf8(&buf[..received])),
+            Ok(received) => { 
+                println!("received {} bytes {:?}", received, str::from_utf8(&buf[..received]));
+                resp.push_str(str::from_utf8(&buf[..received]).unwrap());
+            },
             Err(e) => println!("recv function failed: {:?}", e),
-        }
+        };
+
+        return resp;
     }
 
-    pub fn get_stats(&self) {
+    pub fn get_stats(&self) -> String {
+
+        let mut resp = String::new();
+
 
         let mut buf = [0;150];
 
         match self.stat_socket.recv(&mut buf) {
-            Ok(received) => println!("received {} bytes {:?}", received,  str::from_utf8(&buf[..received])),
+            Ok(received) => { 
+                println!("received {} bytes {:?}", received,  str::from_utf8(&buf[..received]));
+                resp.push_str(str::from_utf8(&buf[..received]).unwrap());
+
+            },
             Err(e) => println!("recv function failed: {:?}", e),
-        }
+        };
+
+        return resp;
     }
 }
